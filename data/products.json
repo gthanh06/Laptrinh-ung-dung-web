@@ -1,0 +1,111 @@
+[
+  {
+    "_id": "p1",
+    "name": "Simili PVC Tiêu Chuẩn",
+    "type": "Simili PVC",
+    "thickness": "0.7mm - 0.9mm",
+    "colors": [
+      "#8B4513",
+      "#CD853F",
+      "#D2B48C",
+      "#000000",
+      "#FFFFFF",
+      "#333333"
+    ],
+    "applications": [
+      "Giày dép",
+      "Thời trang",
+      "Văn phòng phẩm"
+    ],
+    "price": "70,000đ - 95,000đ/m",
+    "imageUrl": "assets/images/simili-pvc.webp",
+    "description": "Vải giả da simili PVC phổ thông được làm từ lớp vải lót dệt kết hợp với nhựa PVC cao cấp. Bề mặt có vân da tự nhiên, chống trầy xước nhẹ, màu sắc đa dạng, giá thành cực kỳ kinh tế, phù hợp cho sản xuất giày dép đại trà, lót túi xách, bìa sổ văn phòng.",
+    "features": [
+      "Giá thành tối ưu",
+      "Đa dạng màu sắc",
+      "Dễ gia công",
+      "Chống thấm nước"
+    ]
+  },
+  {
+    "_id": "p2",
+    "name": "Da PU Cao Cấp Mềm Mại",
+    "type": "Da PU",
+    "thickness": "1.0mm - 1.2mm",
+    "colors": [
+      "#c5a880",
+      "#4A2E1B",
+      "#8B5A2B",
+      "#000000",
+      "#EAEAEA",
+      "#A0522D"
+    ],
+    "applications": [
+      "Sofa",
+      "Thời trang",
+      "Giày dép"
+    ],
+    "price": "150,000đ - 190,000đ/m",
+    "imageUrl": "assets/images/pu-leather.webp",
+    "description": "Da PU cao cấp được phủ lớp nhựa Polyurethane mềm mại, mang lại cảm giác tiếp xúc gần như da thật. Sản phẩm có độ đàn hồi vượt trội, co giãn tốt, bề mặt sang trọng, thoáng khí và có tuổi thọ cao. Phù hợp cho may mặc áo khoác da, túi xách thời trang cao cấp và bọc ghế sofa phòng khách.",
+    "features": [
+      "Đàn hồi vượt trội",
+      "Mềm mịn như da thật",
+      "Chống nổ bề mặt",
+      "Thân thiện môi trường"
+    ]
+  },
+  {
+    "_id": "p3",
+    "name": "Da PVC Chuyên Dụng Ô Tô & Sofa",
+    "type": "Da PVC",
+    "thickness": "1.2mm - 1.4mm",
+    "colors": [
+      "#2B2B2B",
+      "#5C4033",
+      "#D2B48C",
+      "#800000",
+      "#1A303A"
+    ],
+    "applications": [
+      "Ô tô",
+      "Sofa"
+    ],
+    "price": "120,000đ - 160,000đ/m",
+    "imageUrl": "assets/images/pvc-auto.webp",
+    "description": "Dòng da PVC chịu lực cao, thiết kế chuyên dụng cho nội thất xe hơi (ghế da, tapi cửa, trần xe) và các bộ sofa văn phòng chịu tần suất sử dụng lớn. Chất liệu da dày dặn, có khả năng kháng khuẩn, chống cháy lan cấp độ nhẹ và cực kỳ dễ dàng lau chùi vệ sinh bụi bẩn.",
+    "features": [
+      "Chống cháy lan nhẹ",
+      "Chống mài mòn cực tốt",
+      "Kháng khuẩn, dễ vệ sinh",
+      "Độ bền màu cao"
+    ]
+  },
+  {
+    "_id": "p4",
+    "name": "Da Nhân Tạo Cao Cấp Microfiber",
+    "type": "Microfiber",
+    "thickness": "1.4mm - 1.6mm",
+    "colors": [
+      "#3E2723",
+      "#4E342E",
+      "#212121",
+      "#BDBDBD",
+      "#8D6E63"
+    ],
+    "applications": [
+      "Sofa",
+      "Ô tô",
+      "Giày dép"
+    ],
+    "price": "220,000đ - 280,000đ/m",
+    "imageUrl": "assets/images/microfiber.webp",
+    "description": "Da nhân tạo Microfiber là dòng da công nghiệp cao cấp nhất hiện nay, sản xuất bằng công nghệ mô phỏng cấu trúc 3D của da thật. Sản phẩm có độ bền kéo đứt, độ chịu xé cao hơn cả da thật, chống mốc, chống ẩm mốc hoàn hảo và không mùi khó chịu. Lý tưởng cho bọc ghế xe hơi sang trọng, sofa hạng sang và giày bảo hộ lao động xuất khẩu.",
+    "features": [
+      "Bền hơn da thật",
+      "Kháng nấm mốc tự nhiên",
+      "Không mùi hóa chất",
+      "Không chứa chất độc hại"
+    ]
+  }
+]

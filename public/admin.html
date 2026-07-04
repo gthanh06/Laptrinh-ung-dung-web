@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Quản Trị Hệ Thống Thắng Thành Lợi</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* Unique styling helper for Admin Dashboard to look clean and neat */
+    .admin-wrapper {
+      min-height: 100vh;
+      display: flex;
+      background-color: #0c0d0e;
+    }
+    
+    /* Login Page layout */
+    .login-container {
+      margin: auto;
+      max-width: 400px;
+      width: 90%;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      margin-top: 15vh;
+    }
+
+    /* Admin main panel */
+    .admin-sidebar {
+      width: 250px;
+      background-color: #08090a;
+      border-right: 1px solid var(--border-color);
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .admin-logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sidebar-btn {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 4px;
+      text-align: left;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: var(--transition-fast);
+    }
+
+    .sidebar-btn:hover, .sidebar-btn.active {
+      color: var(--text-main);
+      background-color: rgba(197, 168, 128, 0.08);
+      border-left: 3px solid var(--primary);
+    }
+
+    .admin-content {
+      flex-grow: 1;
+      padding: 40px;
+      overflow-y: auto;
+      height: 100vh;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 20px;
+    }
+
+    .dashboard-section {
+      display: none;
+    }
+
+    .dashboard-section.active {
+      display: block;
+    }
+
+    /* Admin Table Styling */
+    .admin-table-container {
+      width: 100%;
+      overflow-x: auto;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      margin-top: 20px;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .admin-table th, .admin-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .admin-table th {
+      background-color: rgba(0, 0, 0, 0.2);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+    }
+
+    .admin-table tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.01);
+    }
+
+    /* Badge colors */
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-pending {
+      background-color: rgba(241, 196, 15, 0.12);
+      color: #f1c40f;
+      border: 1.5px solid rgba(241, 196, 15, 0.2);
+    }
+
+    .badge-approved {
+      background-color: rgba(52, 152, 219, 0.12);
+      color: #3498db;
+      border: 1.5px solid rgba(52, 152, 219, 0.2);
+    }
+
+    .badge-shipped {
+      background-color: rgba(46, 204, 113, 0.12);
+      color: #2ecc71;
+      border: 1.5px solid rgba(46, 204, 113, 0.2);
+    }
+
+    .badge-rejected {
+      background-color: rgba(231, 76, 60, 0.12);
+      color: #e74c3c;
+      border: 1.5px solid rgba(231, 76, 60, 0.2);
+    }
+
+    /* Dropdown inside table */
+    .status-select {
+      background-color: #0f1011;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .status-select:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-action-sm {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .btn-edit {
+      background-color: rgba(52, 152, 219, 0.1);
+      color: #3498db;
+      border: 1px solid rgba(52, 152, 219, 0.3);
+    }
+    .btn-edit:hover {
+      background-color: #3498db;
+      color: #fff;
+    }
+
+    .btn-delete {
+      background-color: rgba(231, 76, 60, 0.1);
+      color: #e74c3c;
+      border: 1px solid rgba(231, 76, 60, 0.3);
+      margin-left: 6px;
+    }
+    .btn-delete:hover {
+      background-color: #e74c3c;
+      color: #fff;
+    }
+
+    .action-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .database-indicator {
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-color);
+    }
+    .db-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #777;
+    }
+    .db-dot.connected {
+      background: #2ecc71;
+      box-shadow: 0 0 8px #2ecc71;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. LOGIN SCREEN -->
+  <div id="login-screen" class="admin-wrapper" style="display: flex;">
+    <div class="login-container">
+      <h2 style="font-size: 1.75rem; text-align: center; margin-bottom: 8px;">ADMIN LOGIN</h2>
+      <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-bottom: 24px;">Hệ thống Quản trị Website Thắng Thành Lợi</p>
+      
+      <form id="admin-login-form">
+        <div class="form-group">
+          <label class="form-label" for="username">Tên đăng nhập</label>
+          <input type="text" id="username" class="form-input" placeholder="Nhập tên đăng nhập" value="admin" required autocomplete="username">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="password">Mật khẩu</label>
+          <input type="password" id="password" class="form-input" placeholder="Nhập mật khẩu" value="admin123" required autocomplete="current-password">
+        </div>
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Đăng Nhập Hệ Thống</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. DASHBOARD MAIN BOARD -->
+  <div id="admin-dashboard" class="admin-wrapper" style="display: none;">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="admin-logo">TTL ADMIN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <button class="sidebar-btn active" id="menu-btn-requests" data-tab="requests">
+            📋 Đơn Yêu Cầu Mẫu
+          </button>
+        </li>
+        <li>
+          <button class="sidebar-btn" id="menu-btn-products" data-tab="products">
+            🛍️ Quản Lý Mẫu Da
+          </button>
+        </li>
+        <li style="margin-top: auto; border-top: 1px solid var(--border-color); padding-top: 15px;">
+          <button class="sidebar-btn" id="logout-btn" style="color: #e74c3c;">
+            🚪 Đăng Xuất Admin
+          </button>
+        </li>
+        <li>
+          <a href="/index.html" class="sidebar-btn" style="color: var(--primary);">
+            🏠 Quay lại Website
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content Panel -->
+    <main class="admin-content">
+      <header class="dashboard-header">
+        <div>
+          <h1 style="font-size: 2rem;">Bảng Quản Trị Hệ Thống</h1>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Xem và cập nhật cơ sở dữ liệu mẫu simili da thời gian thực.</p>
+        </div>
+        <div class="database-indicator">
+          <span class="db-dot" id="db-indicator-dot"></span>
+          <span id="db-indicator-text">Đang kiểm tra kết nối...</span>
+        </div>
+      </header>
+
+      <!-- TAB 1: MANAGE SAMPLE REQUESTS -->
+      <section class="dashboard-section active" id="tab-requests">
+        <div class="action-panel-header">
+          <h2 style="font-size: 1.5rem; margin-bottom: 0;">Danh Sách Đơn Yêu Cầu Mẫu Thử</h2>
+        </div>
+        
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Khách Hàng</th>
+                <th>Số Điện Thoại</th>
+                <th>Địa Chỉ Nhận Mẫu</th>
+                <th>Loại Da Quan Tâm</th>
+                <th>Yêu Cầu / Ghi Chú</th>
+                <th>Thời Gian Gửi</th>
+                <th>Trạng Thái</th>
+              </tr>
+            </thead>
+            <tbody id="requests-table-body">
+              <!-- Rendered dynamically -->
+              <tr>
+                <td colspan="7" style="text-align: center; color: var(--text-muted);">Đang tải danh sách đơn đăng ký mẫu...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 2: MANAGE PRODUCTS -->
+      <section class="dashboard-section" id="tab-products">
+        <div class="action-panel-header">
+          <h2 style="font-size: 1.5rem; margin-bottom: 0;">Quản Lý Danh Mục Mẫu Da</h2>
+          <button class="btn btn-primary" id="btn-open-create-prod" style="padding: 10px 20px; font-size: 0.85rem; border-radius: 4px;">
+            ＋ Thêm Mẫu Da Mới
+          </button>
+        </div>
+
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Chất Liệu Da</th>
+                <th>Dòng Da</th>
+                <th>Độ Dày</th>
+                <th>Màu Sắc Có Sẵn</th>
+                <th>Đơn Giá Tham Khảo</th>
+                <th>Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody id="products-table-body">
+              <!-- Rendered dynamically -->
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-muted);">Đang tải danh sách sản phẩm mẫu...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 3. PRODUCT FORM DIALOG MODAL (For Create and Edit) -->
+  <dialog id="product-form-modal" class="dialog-modal" style="max-width: 600px;">
+    <div class="dialog-header">
+      <h3 id="product-form-title" style="color: var(--primary);">Thêm Mẫu Da Mới</h3>
+      <span class="btn-close-modal" id="close-prod-form-modal">&times;</span>
+    </div>
+    
+    <form id="product-crud-form">
+      <input type="hidden" id="crud-prod-id"> <!-- Hidden field to distinguish Create vs Update -->
+      
+      <div class="form-group">
+        <label class="form-label" for="crud-name">Tên mẫu da *</label>
+        <input type="text" id="crud-name" class="form-input" placeholder="Ví dụ: Da PU Vân Voi Cao Cấp" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="crud-type">Dòng chất liệu *</label>
+          <select id="crud-type" class="form-select" required>
+            <option value="Simili PVC">Simili PVC</option>
+            <option value="Da PU">Da PU</option>
+            <option value="Da PVC">Da PVC</option>
+            <option value="Microfiber">Microfiber</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="crud-thickness">Độ dày tiêu chuẩn *</label>
+          <input type="text" id="crud-thickness" class="form-input" placeholder="Ví dụ: 1.2mm" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="crud-price">Giá bán tham khảo *</label>
+          <input type="text" id="crud-price" class="form-input" placeholder="Ví dụ: 120,000đ/m" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="crud-colors">Mã màu hex (Phân cách bằng dấu phẩy) *</label>
+          <input type="text" id="crud-colors" class="form-input" placeholder="Ví dụ: #000000,#FFFFFF,#C5A880" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="crud-applications">Ứng dụng chính (Phân cách bằng dấu phẩy) *</label>
+        <input type="text" id="crud-applications" class="form-input" placeholder="Ví dụ: Sofa, Ô tô, Giày dép" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="crud-features">Đặc tính nổi bật (Phân cách bằng dấu phẩy)</label>
+        <input type="text" id="crud-features" class="form-input" placeholder="Ví dụ: Chống cháy, Chống nổ, Siêu bền">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="crud-desc">Mô tả sản phẩm chi tiết</label>
+        <textarea id="crud-desc" class="form-textarea" placeholder="Nhập đặc tính chi tiết, cấu tạo sợi lót dệt và thế mạnh..."></textarea>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label class="form-label" for="crud-image">Hình ảnh mẫu da thực tế</label>
+        <div style="display: flex; gap: 15px; align-items: center; margin-top: 5px;">
+          <input type="file" id="crud-image" accept="image/*" class="form-input" style="flex-grow: 1; padding: 8px 12px; font-size: 0.85rem;">
+          <div id="crud-image-preview-container" style="width: 60px; height: 60px; border-radius: 4px; border: 1px solid var(--border-color); overflow: hidden; background-color: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <img id="crud-image-preview" src="assets/images/default-leather.webp" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+            <span id="crud-image-preview-placeholder" style="font-size: 0.65rem; color: var(--text-muted); text-align: center;">Chưa có ảnh</span>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Lưu Dữ Liệu Sản Phẩm</button>
+    </form>
+  </dialog>
+
+  <!-- Floating Toast Notification System -->
+  <div id="toast-notification" class="toast"></div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
