@@ -636,10 +636,48 @@ document.addEventListener('DOMContentLoaded', () => {
     shoe: 'assets/images/oxford_shoe.png'
   };
 
+  // Background toggle & dark color adaptive backdrop logic
+  const visualizerDisplay = document.getElementById('visualizer-display');
+  const bgToggleBtn = document.getElementById('visualizer-bg-toggle');
+  const bgToggleIcon = document.getElementById('bg-toggle-icon');
+  const bgToggleText = document.getElementById('bg-toggle-text');
+  let isManualBgOverride = false;
+  let isLightBgActive = false;
+
+  function setVisualizerBgMode(isLight) {
+    isLightBgActive = isLight;
+    if (visualizerDisplay) {
+      if (isLight) {
+        visualizerDisplay.classList.add('light-bg');
+        if (bgToggleIcon) bgToggleIcon.textContent = '🌙';
+        if (bgToggleText) bgToggleText.textContent = 'Nền tối';
+      } else {
+        visualizerDisplay.classList.remove('light-bg');
+        if (bgToggleIcon) bgToggleIcon.textContent = '☀️';
+        if (bgToggleText) bgToggleText.textContent = 'Nền sáng';
+      }
+    }
+  }
+
+  if (bgToggleBtn) {
+    bgToggleBtn.addEventListener('click', () => {
+      isManualBgOverride = true;
+      setVisualizerBgMode(!isLightBgActive);
+    });
+  }
+
   // Apply color to sofa/car/shoe mockup using CSS pixel filters on img directly
   function applySofaColor(colorHex, colorName) {
     activeColorHex = colorHex;
     const hsl = hexToHsl(colorHex);
+
+    // Auto-detect dark color (black, charcoal, carbon, dark coffee, mahogany, etc.)
+    const isDark = hsl.l <= 35;
+
+    // Automatically switch to bright light background for dark/black colors unless user manually toggled
+    if (!isManualBgOverride) {
+      setVisualizerBgMode(isDark);
+    }
 
     // Hide the rectangular overlay element to prevent background box artifacts on transparent PNGs
     if (sofaOverlay) {
@@ -649,13 +687,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sofaBaseImg) {
       // 1. Black / Dark Charcoal (#000000, #212121, #2B2B2B, #333333, #3E2723)
       if (hsl.l <= 18) {
-        sofaBaseImg.style.filter = 'brightness(0.28) contrast(1.5) grayscale(1)';
+        // Optimized brightness & contrast so seat wrinkles, seams and leather highlights are crisp on light studio background
+        sofaBaseImg.style.filter = 'brightness(0.56) contrast(1.35) grayscale(1)';
+      }
+      else if (hsl.l <= 32 && hsl.s <= 25) {
+        // Dark grey / charcoal
+        sofaBaseImg.style.filter = 'brightness(0.68) contrast(1.25) grayscale(0.8)';
       }
       // 2. White / Pure Cream Light (#FFFFFF, #EAEAEA)
       else if (hsl.l >= 85 && hsl.s <= 20) {
-        sofaBaseImg.style.filter = 'brightness(1.55) contrast(0.85) grayscale(1)';
+        sofaBaseImg.style.filter = 'brightness(1.45) contrast(0.9) grayscale(1)';
       }
-      // 3. Grey / Silver / Slate Neutral (#BDBDBD, #333333, #8D6E63)
+      // 3. Grey / Silver / Slate Neutral (#BDBDBD, #8D6E63)
       else if (hsl.s <= 15) {
         const bright = 0.4 + (hsl.l / 100) * 0.9;
         sofaBaseImg.style.filter = `brightness(${bright}) contrast(1.1) grayscale(1)`;
@@ -674,9 +717,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (colorDotLabel) colorDotLabel.style.backgroundColor = colorHex;
     if (colorNameLabel) colorNameLabel.textContent = colorName;
 
-    // Update texture preview strip
+    // Update texture preview strip (use lighter tint for pitch black so texture remains visible)
     if (texturePreviewInner) {
-      texturePreviewInner.style.backgroundColor = colorHex;
+      texturePreviewInner.style.backgroundColor = (colorHex === '#000000' || colorHex === '#000') ? '#222222' : colorHex;
     }
 
     // Animate mockup wrapper with a subtle scale pulse

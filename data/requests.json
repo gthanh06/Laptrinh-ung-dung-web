@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "_id": "req_1784703659312",
+    "fullName": "Nguyen Gia Thanh",
+    "phone": "0909887776",
+    "email": "gthanh123@gmail.com",
+    "address": "94 pho xa len den",
+    "leatherType": "Simili PVC",
+    "colorInterest": "den",
+    "notes": "",
+    "status": "Đã gửi mẫu",
+    "createdAt": "2026-07-22T07:00:59.312Z",
+    "updatedAt": "2026-07-22T07:01:25.997Z"
+  }
+]
