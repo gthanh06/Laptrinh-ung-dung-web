@@ -917,7 +917,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (response.ok) {
         showToast(t('toast.submitSuccess'), 'success');
         requestForm.reset();
-        document.getElementById('colorInterest').value = t('request.form.color.default');
+        document.getElementById('colorInterest').selectedIndex = 0;
       } else {
         throw new Error(result.message || 'Lỗi lưu thông tin');
       }
