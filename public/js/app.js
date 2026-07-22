@@ -3,52 +3,332 @@ document.addEventListener('DOMContentLoaded', () => {
   let productsData = [];
   const BACKEND_URL = ''; // Relative path because of express serving public folder
 
+  // --- LANGUAGE / TRANSLATIONS ---
+  const translations = {
+    vi: {
+      'nav.home': 'Trang chủ',
+      'nav.about': 'Giới thiệu',
+      'nav.products': 'Sản phẩm',
+      'nav.customizer': 'Thử màu da',
+      'nav.request': 'Đăng ký mẫu',
+      'nav.contact': 'Liên hệ',
+      'hero.badge': 'ĐẲNG CẤP DA CÔNG NGHIỆP SINCE 1994',
+      'hero.title': 'Kiến Tạo Không Gian<br><span>Nâng Tầm Chất Liệu</span>',
+      'hero.desc': 'Thắng Thành Lợi cung cấp giải pháp vải giả da cao cấp (Simili, PU, PVC, Microfiber) vượt trội về chất lượng, dẫn đầu về xu hướng màu sắc và hoa văn, đồng hành cùng các thương hiệu sofa, ô tô, giày dép hàng đầu.',
+      'hero.btn1': 'Khám phá sản phẩm',
+      'hero.btn2': 'Đăng ký nhận mẫu thử',
+      'about.subtitle': 'VỀ CHÚNG TÔI',
+      'about.title': 'Hành Trình Hơn 3 Thập Kỷ Kiến Tạo Uy Tín',
+      'about.p1': 'Khởi đầu từ cửa hàng Đại Thắng năm 1994, Thắng Thành Lợi đã không ngừng lớn mạnh để trở thành nhà phân phối da công nghiệp uy tín bậc nhất tại Việt Nam. Chúng tôi thấu hiểu từng chất liệu, đáp ứng mọi yêu cầu khắt khe về kỹ thuật và thẩm mỹ.',
+      'about.p2': 'Sản phẩm của chúng tôi luôn đi kèm cam kết về nguồn hàng ổn định, mức giá cạnh tranh tận xưởng và sự trung thực tuyệt đối trong mọi giao dịch.',
+      'about.stat1.title': 'Năm kinh nghiệm',
+      'about.stat1.desc': 'Đồng hành phát triển từ 1994',
+      'about.stat2.title': 'Mẫu mã đa dạng',
+      'about.stat2.desc': 'Luôn cập nhật xu hướng mới',
+      'about.stat3.title': 'Đạt chuẩn chất lượng',
+      'about.stat3.desc': 'Kháng khuẩn, chống nước, bền màu',
+      'about.stat4.title': 'Đối tác tin cậy',
+      'about.stat4.desc': 'Xưởng sofa, ô tô, giày dép lớn',
+      'products.subtitle': 'DANH MỤC CHẤT LIỆU',
+      'products.title': 'Sản Phẩm Da Nổi Bật',
+      'products.desc': 'Tổng hợp các dòng da công nghiệp chủ lực, được kiểm định nghiêm ngặt về chất lượng trước khi phân phối.',
+      'products.filter.all': 'Tất cả',
+      'products.loading': 'Đang tải danh sách sản phẩm da...',
+      'products.empty': 'Không tìm thấy mẫu da nào thuộc danh mục này.',
+      'products.thickness': 'Độ dày:',
+      'products.feature': 'Đặc tính:',
+      'products.colors': 'Màu có sẵn:',
+      'products.detail': 'Chi tiết →',
+      'customizer.subtitle': 'WOW EXPERIENCE',
+      'customizer.title': 'Phòng Trực Quan Hóa Chất Liệu',
+      'customizer.desc': 'Chọn loại da và thay đổi màu sắc trực quan để xem sự hòa hợp trên các mô hình sản phẩm thực tế.',
+      'customizer.step1': '1. Chọn mô hình bọc thử',
+      'customizer.mockup.sofa': 'Ghế Sofa',
+      'customizer.mockup.car': 'Nội thất Ô tô',
+      'customizer.mockup.shoe': 'Giày Da Oxford',
+      'customizer.step2': '2. Chọn Chất liệu vân da',
+      'customizer.type.simili': 'Simili PVC (Mịn)',
+      'customizer.type.pu': 'Da PU (Vân Nhẹ)',
+      'customizer.type.pvc': 'Da PVC (Dày dặn)',
+      'customizer.type.micro': 'Microfiber (Siêu mịn)',
+      'customizer.step3': '3. Chọn Màu sắc Da',
+      'customizer.textureLabel': 'Mẫu vân da đang chọn',
+      'customizer.gallerySubtitle': 'BẢNG MẪU DA',
+      'customizer.galleryTitle': 'Xem Trực Tiếp Mẫu Vân Da',
+      'customizer.galleryDesc': 'Nhấn vào mẫu da bên dưới để xem chi tiết vân da và áp dụng lên mô hình sofa phía trên.',
+      'customizer.spec.type': 'Chất liệu da:',
+      'customizer.spec.thickness': 'Độ dày tiêu chuẩn:',
+      'customizer.spec.features': 'Đặc tính nổi bật:',
+      'request.subtitle': 'ĐĂNG KÝ NHẬN MẪU THỬ',
+      'request.title': 'Trực Tiếp Trải Nghiệm Chất Lượng',
+      'request.desc': 'Chúng tôi sẵn sàng gửi miễn phí sổ mẫu da thử tận nơi (catalog mini chứa các mẩu da thật có kích thước 10x10cm) để bạn cảm nhận trực tiếp độ dày, bề mặt vân da và kiểm định chất lượng vật lý.',
+      'request.info.phone.title': 'Điện thoại Hotline',
+      'request.info.email.title': 'Hòm thư hỗ trợ',
+      'request.info.address.title': 'Tổng kho & Văn phòng',
+      'request.form.title': 'Thông Tin Nhận Mẫu Thử',
+      'request.form.fullName': 'Họ và tên *',
+      'request.form.fullName.ph': 'Ví dụ: Nguyễn Văn A',
+      'request.form.phone': 'Số điện thoại *',
+      'request.form.phone.ph': 'Ví dụ: 0912345678',
+      'request.form.email': 'Hòm thư email (nếu có)',
+      'request.form.email.ph': 'ten@congty.com',
+      'request.form.address': 'Địa chỉ nhận mẫu thử *',
+      'request.form.address.ph': 'Số nhà, tên đường, phường/xã, quận/huyện, tỉnh thành...',
+      'request.form.leatherType': 'Dòng da mong muốn *',
+      'request.form.leatherType.simili': 'Simili PVC',
+      'request.form.leatherType.pu': 'Da PU cao cấp',
+      'request.form.leatherType.pvc': 'Da PVC ô tô & sofa',
+      'request.form.leatherType.micro': 'Microfiber siêu bền',
+      'request.form.color': 'Tông màu quan tâm',
+      'request.form.color.ph': 'Ví dụ: Đen, Kem, Nâu...',
+      'request.form.color.default': 'Tự chọn',
+      'request.form.notes': 'Ghi chú yêu cầu thêm',
+      'request.form.notes.ph': 'Nêu rõ yêu cầu về độ dày hoặc mục đích sử dụng (Ví dụ: bọc ghế oto sang, làm ví bóp bọc sổ...) để chúng tôi chọn mẫu thử chính xác nhất.',
+      'request.form.submit': 'Gửi Yêu Cầu Nhận Mẫu',
+      'contact.subtitle': 'ĐỊA CHỈ PHÂN PHỐI',
+      'contact.title': 'Vị Trí Cửa Hàng Tổng Kho',
+      'contact.mapHint': '📍 Bấm để mở trong Google Maps',
+      'contact.mapAria': 'Mở Google Maps',
+      'footer.desc': 'Tổng đại lý phân phối vải giả da simili, da nhân tạo cao cấp cho thị trường nội địa và xuất khẩu. Kiến tạo niềm tin vững bền qua hơn 30 năm tận tụy.',
+      'footer.quicklinks': 'Liên Kết Nhanh',
+      'footer.link.products': 'Danh mục da',
+      'footer.link.customizer': 'Bộ thử màu da',
+      'footer.link.request': 'Yêu cầu mẫu',
+      'footer.legal': 'Thông Tin Pháp Lý',
+      'footer.legal.tax': 'Mã số thuế:',
+      'footer.legal.rep': 'Đại diện:',
+      'footer.legal.address': 'Địa chỉ đăng ký kinh doanh:',
+      'modal.defaultTitle': 'Tên sản phẩm da',
+      'modal.type': 'Dòng chất liệu:',
+      'modal.thickness': 'Độ dày tiêu chuẩn:',
+      'modal.price': 'Giá bán phân phối:',
+      'modal.applications': 'Ứng dụng may mặc / sản xuất:',
+      'modal.features': 'Đặc tính kỹ thuật:',
+      'modal.colors': 'Bảng màu sản xuất sẵn:',
+      'modal.requestBtn': 'Yêu cầu mẫu thử da này',
+      'toast.offlineProducts': 'Đang hiển thị danh mục sản phẩm ngoại tuyến.',
+      'toast.submitSuccess': '✅ Gửi yêu cầu nhận mẫu thành công! Chúng tôi sẽ gọi lại trong 24h.',
+      'toast.submitError': '⚠️ Không thể kết nối server để lưu yêu cầu. Vui lòng kiểm tra lại.'
+    },
+    en: {
+      'nav.home': 'Home',
+      'nav.about': 'About',
+      'nav.products': 'Products',
+      'nav.customizer': 'Color Studio',
+      'nav.request': 'Get a Sample',
+      'nav.contact': 'Contact',
+      'hero.badge': 'PREMIUM INDUSTRIAL LEATHER SINCE 1994',
+      'hero.title': 'Crafting Spaces<br><span>Elevating Materials</span>',
+      'hero.desc': 'Thang Thanh Loi delivers premium faux leather solutions (Simili, PU, PVC, Microfiber) with outstanding quality, leading color and pattern trends, partnering with top sofa, automotive, and footwear brands.',
+      'hero.btn1': 'Explore Products',
+      'hero.btn2': 'Request a Free Sample',
+      'about.subtitle': 'ABOUT US',
+      'about.title': 'Over Three Decades of Building Trust',
+      'about.p1': 'Starting from the Dai Thang store in 1994, Thang Thanh Loi has grown continuously to become one of the most trusted industrial leather distributors in Vietnam. We understand every material and meet the most demanding technical and aesthetic requirements.',
+      'about.p2': 'Our products always come with a commitment to stable supply, competitive factory-direct pricing, and absolute honesty in every transaction.',
+      'about.stat1.title': 'Years of Experience',
+      'about.stat1.desc': 'Growing together since 1994',
+      'about.stat2.title': 'Diverse Designs',
+      'about.stat2.desc': 'Always up to date with new trends',
+      'about.stat3.title': 'Quality Certified',
+      'about.stat3.desc': 'Antibacterial, waterproof, colorfast',
+      'about.stat4.title': 'Trusted Partners',
+      'about.stat4.desc': 'Major sofa, automotive & footwear workshops',
+      'products.subtitle': 'MATERIAL CATALOG',
+      'products.title': 'Featured Leather Products',
+      'products.desc': 'A curated collection of our core industrial leather lines, strictly quality-checked before distribution.',
+      'products.filter.all': 'All',
+      'products.loading': 'Loading leather product catalog...',
+      'products.empty': 'No leather samples found in this category.',
+      'products.thickness': 'Thickness:',
+      'products.feature': 'Feature:',
+      'products.colors': 'Colors:',
+      'products.detail': 'Details →',
+      'customizer.subtitle': 'WOW EXPERIENCE',
+      'customizer.title': 'Material Visualization Studio',
+      'customizer.desc': 'Choose a leather type and change colors visually to preview the match on real product mockups.',
+      'customizer.step1': '1. Choose a Mockup Model',
+      'customizer.mockup.sofa': 'Sofa Chair',
+      'customizer.mockup.car': 'Car Interior',
+      'customizer.mockup.shoe': 'Oxford Leather Shoe',
+      'customizer.step2': '2. Choose a Leather Texture',
+      'customizer.type.simili': 'Simili PVC (Smooth)',
+      'customizer.type.pu': 'PU Leather (Light Grain)',
+      'customizer.type.pvc': 'PVC Leather (Thick)',
+      'customizer.type.micro': 'Microfiber (Ultra-smooth)',
+      'customizer.step3': '3. Choose Leather Color',
+      'customizer.textureLabel': 'Selected leather texture',
+      'customizer.gallerySubtitle': 'LEATHER SAMPLES',
+      'customizer.galleryTitle': 'View Leather Samples Directly',
+      'customizer.galleryDesc': 'Click on a leather sample below to see texture details and apply it to the sofa model above.',
+      'customizer.spec.type': 'Leather Type:',
+      'customizer.spec.thickness': 'Standard Thickness:',
+      'customizer.spec.features': 'Key Features:',
+      'request.subtitle': 'REQUEST A SAMPLE',
+      'request.title': 'Experience the Quality Firsthand',
+      'request.desc': "We're happy to send you a free sample booklet (a mini catalog with real 10x10cm leather swatches) so you can feel the thickness, texture, and physical quality firsthand.",
+      'request.info.phone.title': 'Hotline',
+      'request.info.email.title': 'Support Email',
+      'request.info.address.title': 'Warehouse & Office',
+      'request.form.title': 'Sample Request Information',
+      'request.form.fullName': 'Full Name *',
+      'request.form.fullName.ph': 'e.g. John Smith',
+      'request.form.phone': 'Phone Number *',
+      'request.form.phone.ph': 'e.g. 0912345678',
+      'request.form.email': 'Email Address (optional)',
+      'request.form.email.ph': 'name@company.com',
+      'request.form.address': 'Delivery Address *',
+      'request.form.address.ph': 'House no., street, ward/district, city...',
+      'request.form.leatherType': 'Preferred Leather Type *',
+      'request.form.leatherType.simili': 'Simili PVC',
+      'request.form.leatherType.pu': 'Premium PU Leather',
+      'request.form.leatherType.pvc': 'Automotive & Sofa PVC Leather',
+      'request.form.leatherType.micro': 'Ultra-durable Microfiber',
+      'request.form.color': 'Preferred Color Tone',
+      'request.form.color.ph': 'e.g. Black, Cream, Brown...',
+      'request.form.color.default': 'Any Color',
+      'request.form.notes': 'Additional Notes',
+      'request.form.notes.ph': 'Specify thickness or intended use (e.g. car seat upholstery, wallet, notebook cover...) so we can pick the most accurate sample for you.',
+      'request.form.submit': 'Submit Sample Request',
+      'contact.subtitle': 'DISTRIBUTION LOCATION',
+      'contact.title': 'Warehouse Store Location',
+      'contact.mapHint': '📍 Tap to open in Google Maps',
+      'contact.mapAria': 'Open Google Maps',
+      'footer.desc': 'A leading distributor of simili faux leather and premium synthetic leather for the domestic and export markets. Building lasting trust over more than 30 years of dedication.',
+      'footer.quicklinks': 'Quick Links',
+      'footer.link.products': 'Leather Catalog',
+      'footer.link.customizer': 'Color Studio',
+      'footer.link.request': 'Request a Sample',
+      'footer.legal': 'Legal Information',
+      'footer.legal.tax': 'Tax Code:',
+      'footer.legal.rep': 'Representative:',
+      'footer.legal.address': 'Registered Business Address:',
+      'modal.defaultTitle': 'Leather Product Name',
+      'modal.type': 'Material Line:',
+      'modal.thickness': 'Standard Thickness:',
+      'modal.price': 'Distribution Price:',
+      'modal.applications': 'Applications / Production Use:',
+      'modal.features': 'Technical Features:',
+      'modal.colors': 'Available Color Palette:',
+      'modal.requestBtn': 'Request This Sample',
+      'toast.offlineProducts': 'Showing offline product catalog.',
+      'toast.submitSuccess': "✅ Sample request submitted successfully! We'll call you back within 24h.",
+      'toast.submitError': '⚠️ Unable to connect to the server to save your request. Please try again.'
+    }
+  };
+
+  let currentLang = localStorage.getItem('siteLang') || 'vi';
+
+  function t(key) {
+    return (translations[currentLang] && translations[currentLang][key]) || translations.vi[key] || key;
+  }
+
+  function applyTranslations() {
+    document.documentElement.lang = currentLang;
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      el.innerHTML = t(el.dataset.i18n);
+    });
+
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      el.setAttribute('placeholder', t(el.dataset.i18nPlaceholder));
+    });
+
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+      el.setAttribute('aria-label', t(el.dataset.i18nAria));
+    });
+
+    document.querySelectorAll('[data-i18n-value]').forEach(el => {
+      const key = el.dataset.i18nValue;
+      const isUntouched = Object.values(translations).some(dict => dict[key] === el.value) || !el.value;
+      if (isUntouched) el.value = t(key);
+    });
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === currentLang);
+    });
+
+    // Refresh dynamic content that embeds translated labels
+    const activeFilterBtn = document.querySelector('.filter-btn.active');
+    const activeFilter = activeFilterBtn ? activeFilterBtn.dataset.filter : 'all';
+    const filteredProducts = activeFilter === 'all' ? productsData : productsData.filter(p => p.type === activeFilter);
+    if (productsData.length) renderProducts(filteredProducts);
+
+    const activeMaterialBtn = document.querySelector('[data-type].active');
+    if (activeMaterialBtn) {
+      const data = visualizerMaterials[activeMaterialBtn.dataset.type];
+      document.getElementById('spec-leather-features').textContent = data.features[currentLang];
+      renderVisualizerSwatches(data.swatches);
+      renderLeatherGallery(data.swatches);
+    }
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentLang = btn.dataset.lang;
+      localStorage.setItem('siteLang', currentLang);
+      applyTranslations();
+    });
+  });
+
   // Swatch color definitions for visualizer
   const visualizerMaterials = {
     'Simili PVC': {
       thickness: "0.7mm - 0.9mm",
-      features: "Đa màu sắc, Chống thấm nước, Giá cạnh tranh",
+      features: {
+        vi: 'Đa màu sắc, Chống thấm nước, Giá cạnh tranh',
+        en: 'Wide color range, Waterproof, Competitive price'
+      },
       swatches: [
-        { color: '#8B4513', name: 'Nâu Simili' },
-        { color: '#CD853F', name: 'Bò Sáng' },
-        { color: '#D2B48C', name: 'Kem Cát' },
-        { color: '#000000', name: 'Đen Bóng' },
-        { color: '#FFFFFF', name: 'Trắng Sữa' },
-        { color: '#333333', name: 'Xám Đậm' }
+        { color: '#8B4513', name: { vi: 'Nâu Simili', en: 'Simili Brown' } },
+        { color: '#CD853F', name: { vi: 'Bò Sáng', en: 'Light Tan' } },
+        { color: '#D2B48C', name: { vi: 'Kem Cát', en: 'Sand Cream' } },
+        { color: '#000000', name: { vi: 'Đen Bóng', en: 'Glossy Black' } },
+        { color: '#FFFFFF', name: { vi: 'Trắng Sữa', en: 'Milk White' } },
+        { color: '#333333', name: { vi: 'Xám Đậm', en: 'Dark Grey' } }
       ]
     },
     'Da PU': {
       thickness: "1.0mm - 1.2mm",
-      features: "Đàn hồi tốt, Mềm mại như da thật, Không bong tróc",
+      features: {
+        vi: 'Đàn hồi tốt, Mềm mại như da thật, Không bong tróc',
+        en: 'Great elasticity, Soft like real leather, Peel-resistant'
+      },
       swatches: [
-        { color: '#c5a880', name: 'Vàng Kim Luxury' },
-        { color: '#4A2E1B', name: 'Nâu Cafe' },
-        { color: '#8B5A2B', name: 'Nâu Hạt Dẻ' },
-        { color: '#000000', name: 'Đen Mờ' },
-        { color: '#EAEAEA', name: 'Trắng Kem' },
-        { color: '#A0522D', name: 'Đỏ Sienna' }
+        { color: '#c5a880', name: { vi: 'Vàng Kim Luxury', en: 'Luxury Gold' } },
+        { color: '#4A2E1B', name: { vi: 'Nâu Cafe', en: 'Coffee Brown' } },
+        { color: '#8B5A2B', name: { vi: 'Nâu Hạt Dẻ', en: 'Chestnut Brown' } },
+        { color: '#000000', name: { vi: 'Đen Mờ', en: 'Matte Black' } },
+        { color: '#EAEAEA', name: { vi: 'Trắng Kem', en: 'Cream White' } },
+        { color: '#A0522D', name: { vi: 'Đỏ Sienna', en: 'Sienna Red' } }
       ]
     },
     'Da PVC': {
       thickness: "1.2mm - 1.4mm",
-      features: "Chống mài mòn cao, Kháng khuẩn, Chống cháy lan",
+      features: {
+        vi: 'Chống mài mòn cao, Kháng khuẩn, Chống cháy lan',
+        en: 'High abrasion resistance, Antibacterial, Flame retardant'
+      },
       swatches: [
-        { color: '#2B2B2B', name: 'Đen Than' },
-        { color: '#5C4033', name: 'Nâu Đậm Ô tô' },
-        { color: '#D2B48C', name: 'Kem Bọc Ghế' },
-        { color: '#800000', name: 'Đỏ Đô Luxury' },
-        { color: '#1A303A', name: 'Xanh Navy' }
+        { color: '#2B2B2B', name: { vi: 'Đen Than', en: 'Charcoal Black' } },
+        { color: '#5C4033', name: { vi: 'Nâu Đậm Ô tô', en: 'Automotive Dark Brown' } },
+        { color: '#D2B48C', name: { vi: 'Kem Bọc Ghế', en: 'Seat Cream' } },
+        { color: '#800000', name: { vi: 'Đỏ Đô Luxury', en: 'Luxury Maroon' } },
+        { color: '#1A303A', name: { vi: 'Xanh Navy', en: 'Navy Blue' } }
       ]
     },
     'Microfiber': {
       thickness: "1.4mm - 1.6mm",
-      features: "Bền vượt trội da thật, Chống mốc, Không mùi",
+      features: {
+        vi: 'Bền vượt trội da thật, Chống mốc, Không mùi',
+        en: 'Outlasts real leather, Mold-resistant, Odorless'
+      },
       swatches: [
-        { color: '#3E2723', name: 'Nâu Gụ Hạng Sang' },
-        { color: '#4E342E', name: 'Nâu Đất Mịn' },
-        { color: '#212121', name: 'Đen Carbon' },
-        { color: '#BDBDBD', name: 'Ghi Xám Nhạt' },
-        { color: '#8D6E63', name: 'Nâu Khói' }
+        { color: '#3E2723', name: { vi: 'Nâu Gụ Hạng Sang', en: 'Premium Mahogany' } },
+        { color: '#4E342E', name: { vi: 'Nâu Đất Mịn', en: 'Smooth Earth Brown' } },
+        { color: '#212121', name: { vi: 'Đen Carbon', en: 'Carbon Black' } },
+        { color: '#BDBDBD', name: { vi: 'Ghi Xám Nhạt', en: 'Light Grey' } },
+        { color: '#8D6E63', name: { vi: 'Nâu Khói', en: 'Smoky Brown' } }
       ]
     }
   };
@@ -117,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderProducts(productsData);
     } catch (error) {
       console.error('Error fetching products:', error);
-      showToast('Đang hiển thị danh mục sản phẩm ngoại tuyến.', 'error');
+      showToast(t('toast.offlineProducts'), 'error');
       // If server fails or offline, Express code fallback logic is client-side rendered here
       // to guarantee functionality:
       productsData = getOfflineBackupProducts();
@@ -130,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
     grid.innerHTML = '';
 
     if (products.length === 0) {
-      grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">Không tìm thấy mẫu da nào thuộc danh mục này.</div>';
+      grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">${t('products.empty')}</div>`;
       return;
     }
 
@@ -146,8 +426,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (product.imageUrl && product.imageUrl.startsWith('uploads/')) {
         mediaHtml = `<img src="${product.imageUrl}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover; transition: var(--transition-smooth);" class="product-uploaded-img">`;
       } else {
-        mediaHtml = `<div class="leather-swatch-canvas" style="background-image: url('assets/images/leather_texture_seamless.png'); background-color: ${previewBgColor}; background-size: 80px;"></div>`;
+        mediaHtml = `<div class="leather-swatch-canvas" data-base-color="${previewBgColor}" style="background-image: url('assets/images/leather_swatch_texture.png'); background-color: ${previewBgColor};"></div>`;
       }
+
+      // Generate color swatches for this product
+      const colorSwatchesHtml = product.colors.map((color, idx) => 
+        `<div class="product-color-dot ${idx === 0 ? 'active' : ''}" data-color="${color}" style="background-color: ${color};" title="${color}"></div>`
+      ).join('');
       
       card.innerHTML = `
         <div class="product-img-box">
@@ -157,18 +442,38 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="product-info">
           <h3 class="product-title">${product.name}</h3>
           <p class="product-desc">${product.description}</p>
+          <div class="product-colors-row">
+            <span class="product-colors-label">${t('products.colors')}</span>
+            <div class="product-colors-swatches">${colorSwatchesHtml}</div>
+          </div>
           <ul class="product-specs">
-            <li>Độ dày: ${product.thickness}</li>
-            <li>Đặc tính: ${product.features[0] || 'Cao cấp'}</li>
+            <li>${t('products.thickness')} ${product.thickness}</li>
+            <li>${t('products.feature')} ${product.features[0] || 'Cao cấp'}</li>
           </ul>
           <div class="product-footer">
             <span class="product-price">${product.price}</span>
             <button class="btn-card-action btn-view-detail" data-id="${product._id || product.id}">
-              Chi tiết →
+              ${t('products.detail')}
             </button>
           </div>
         </div>
       `;
+
+      // Add color swatch click listeners to change the card preview
+      const swatchCanvas = card.querySelector('.leather-swatch-canvas');
+      card.querySelectorAll('.product-color-dot').forEach(dot => {
+        dot.addEventListener('click', (e) => {
+          e.stopPropagation();
+          // Update active dot
+          card.querySelectorAll('.product-color-dot').forEach(d => d.classList.remove('active'));
+          dot.classList.add('active');
+          // Change the canvas background color
+          if (swatchCanvas) {
+            swatchCanvas.style.backgroundColor = dot.dataset.color;
+          }
+        });
+      });
+
       grid.appendChild(card);
     });
 
@@ -240,38 +545,38 @@ document.addEventListener('DOMContentLoaded', () => {
           
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9rem;">
             <tr style="border-bottom: 1px solid var(--border-color);">
-              <td style="padding: 10px 0; color: var(--text-muted); font-weight: 500;">Dòng chất liệu:</td>
+              <td style="padding: 10px 0; color: var(--text-muted); font-weight: 500;">${t('modal.type')}</td>
               <td style="padding: 10px 0; color: var(--primary); font-weight: 600;">${product.type}</td>
             </tr>
             <tr style="border-bottom: 1px solid var(--border-color);">
-              <td style="padding: 10px 0; color: var(--text-muted); font-weight: 500;">Độ dày tiêu chuẩn:</td>
+              <td style="padding: 10px 0; color: var(--text-muted); font-weight: 500;">${t('modal.thickness')}</td>
               <td style="padding: 10px 0; font-weight: 500;">${product.thickness}</td>
             </tr>
             <tr style="border-bottom: 1px solid var(--border-color);">
-              <td style="padding: 10px 0; color: var(--text-muted); font-weight: 500;">Giá bán phân phối:</td>
+              <td style="padding: 10px 0; color: var(--text-muted); font-weight: 500;">${t('modal.price')}</td>
               <td style="padding: 10px 0; font-weight: 700; color: var(--primary);">${product.price}</td>
             </tr>
           </table>
 
           <div style="margin-bottom: 20px;">
-            <h4 style="font-size: 0.9rem; text-transform:uppercase; margin-bottom: 10px; color: var(--text-muted);">Ứng dụng may mặc / sản xuất:</h4>
+            <h4 style="font-size: 0.9rem; text-transform:uppercase; margin-bottom: 10px; color: var(--text-muted);">${t('modal.applications')}</h4>
             <div style="display:flex; flex-wrap:wrap; gap:8px;">${appList}</div>
           </div>
 
           <div style="margin-bottom: 20px;">
-            <h4 style="font-size: 0.9rem; text-transform:uppercase; margin-bottom: 8px; color: var(--text-muted);">Đặc tính kỹ thuật:</h4>
+            <h4 style="font-size: 0.9rem; text-transform:uppercase; margin-bottom: 8px; color: var(--text-muted);">${t('modal.features')}</h4>
             <ul style="list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size: 0.9rem; color: var(--text-main); font-weight:500;">
               ${featuresList}
             </ul>
           </div>
 
           <div>
-            <h4 style="font-size: 0.9rem; text-transform:uppercase; margin-bottom: 10px; color: var(--text-muted);">Bảng màu sản xuất sẵn:</h4>
+            <h4 style="font-size: 0.9rem; text-transform:uppercase; margin-bottom: 10px; color: var(--text-muted);">${t('modal.colors')}</h4>
             <div style="display:flex; gap:12px; flex-wrap:wrap;">${colorsList}</div>
           </div>
-          
+
           <div style="margin-top: 30px; display:flex; gap:15px;">
-            <a href="#request" class="btn btn-primary" onclick="document.getElementById('product-detail-modal').close();" style="flex:1; padding: 10px 20px; font-size:0.9rem;">Yêu cầu mẫu thử da này</a>
+            <a href="#request" class="btn btn-primary" onclick="document.getElementById('product-detail-modal').close();" style="flex:1; padding: 10px 20px; font-size:0.9rem;">${t('modal.requestBtn')}</a>
           </div>
         </div>
       </div>
@@ -288,46 +593,90 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --- INTERACTIVE VISUALIZER LOGIC ---
-  const visualizerCanvas = document.getElementById('visualizer-canvas');
+  const sofaOverlay = document.getElementById('sofa-color-overlay');
+  const sofaWrapper = document.getElementById('sofa-image-wrapper');
+  const colorDotLabel = document.getElementById('color-dot-label');
+  const colorNameLabel = document.getElementById('color-name-label');
+  const texturePreviewInner = document.getElementById('texture-preview-inner');
   const controlMockups = document.querySelectorAll('[data-mockup]');
   const controlMaterials = document.querySelectorAll('[data-type]');
   const vazSwatches = document.getElementById('vaz-swatches');
+  const sofaBaseImg = document.getElementById('sofa-base-img');
 
   let activeMaterial = 'Simili PVC';
+  let activeColorHex = '#c5a880';
 
-  // Toggle Mockup Display (Sofa, Car Seat, Shoe)
+  // Mockup images for each type
+  const mockupImages = {
+    sofa: 'assets/images/sofa_neutral.png',
+    car: 'assets/images/sofa_neutral.png',
+    shoe: 'assets/images/sofa_neutral.png'
+  };
+
+  // Apply color to sofa using blend mode overlay
+  function applySofaColor(colorHex, colorName) {
+    activeColorHex = colorHex;
+
+    // Apply color overlay on sofa image
+    if (sofaOverlay) {
+      sofaOverlay.style.backgroundColor = colorHex;
+    }
+
+    // Update color label
+    if (colorDotLabel) colorDotLabel.style.backgroundColor = colorHex;
+    if (colorNameLabel) colorNameLabel.textContent = colorName;
+
+    // Update texture preview strip
+    if (texturePreviewInner) {
+      texturePreviewInner.style.backgroundColor = colorHex;
+    }
+
+    // Animate sofa wrapper with a subtle pulse
+    if (sofaWrapper) {
+      sofaWrapper.style.filter = 'drop-shadow(0 25px 50px rgba(0,0,0,0.7)) brightness(1.05)';
+      setTimeout(() => {
+        sofaWrapper.style.filter = 'drop-shadow(0 25px 50px rgba(0,0,0,0.7))';
+      }, 400);
+    }
+  }
+
+  // Toggle Mockup Display (Sofa, Car Seat, Shoe) - now changes the mockup text label only
   controlMockups.forEach(btn => {
     btn.addEventListener('click', (e) => {
       controlMockups.forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
 
       const mockupName = e.target.dataset.mockup;
-      document.getElementById('mockup-sofa').style.display = mockupName === 'sofa' ? 'block' : 'none';
-      document.getElementById('mockup-car').style.display = mockupName === 'car' ? 'block' : 'none';
-      document.getElementById('mockup-shoe').style.display = mockupName === 'shoe' ? 'block' : 'none';
+      // For now, we use sofa image for all mockups
+      if (sofaBaseImg && mockupImages[mockupName]) {
+        sofaBaseImg.src = mockupImages[mockupName];
+      }
+      // Re-apply current color
+      const activeSwatch = vazSwatches.querySelector('.leather-swatch-item.active');
+      if (activeSwatch) {
+        applySofaColor(activeSwatch.dataset.color, activeSwatch.dataset.name || '');
+      }
     });
   });
 
-  // Toggle Material Type (PU, PVC, Simili, Microfiber) -> Alters Swatches and Specs
+  // Toggle Material Type -> Alters Swatches and Specs
   controlMaterials.forEach(btn => {
     btn.addEventListener('click', (e) => {
       controlMaterials.forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
 
       activeMaterial = e.target.dataset.type;
-      const textureScale = e.target.dataset.scale;
-
-      // Adjust pattern scale
-      visualizerCanvas.style.backgroundSize = textureScale;
 
       // Update Spec Labels
       const data = visualizerMaterials[activeMaterial];
       document.getElementById('spec-leather-type').textContent = activeMaterial;
       document.getElementById('spec-leather-thickness').textContent = data.thickness;
-      document.getElementById('spec-leather-features').textContent = data.features;
+      document.getElementById('spec-leather-features').textContent = data.features[currentLang];
 
       // Load Swatches for this specific material
       renderVisualizerSwatches(data.swatches);
+      // Also update the gallery
+      renderLeatherGallery(data.swatches);
     });
   });
 
@@ -335,26 +684,120 @@ document.addEventListener('DOMContentLoaded', () => {
     vazSwatches.innerHTML = '';
     swatches.forEach((swatch, idx) => {
       const sw = document.createElement('div');
-      sw.className = 'swatch' + (idx === 0 ? ' active' : '');
+      sw.className = 'leather-swatch-item' + (idx === 0 ? ' active' : '');
       sw.style.backgroundColor = swatch.color;
       sw.dataset.color = swatch.color;
-      sw.title = swatch.name;
+      sw.dataset.name = swatch.name[currentLang];
+      sw.title = swatch.name[currentLang];
 
-      sw.addEventListener('click', (e) => {
-        document.querySelectorAll('#vaz-swatches .swatch').forEach(s => s.classList.remove('active'));
-        e.target.classList.add('active');
-        
-        // Dynamically color visualizer texture using CSS blend mode
-        visualizerCanvas.style.backgroundColor = e.target.dataset.color;
+      // Add tooltip
+      const tooltip = document.createElement('span');
+      tooltip.className = 'swatch-name-tooltip';
+      tooltip.textContent = swatch.name[currentLang];
+      sw.appendChild(tooltip);
+
+      sw.addEventListener('click', () => {
+        document.querySelectorAll('#vaz-swatches .leather-swatch-item').forEach(s => s.classList.remove('active'));
+        sw.classList.add('active');
+
+        // Apply color to sofa
+        applySofaColor(swatch.color, swatch.name[currentLang]);
+
+        // Also highlight matching gallery card
+        document.querySelectorAll('.leather-sample-card').forEach(card => {
+          card.classList.toggle('active', card.dataset.color === swatch.color);
+        });
       });
 
       vazSwatches.appendChild(sw);
     });
 
-    // Apply the first swatch by default on render
+    // Apply the first swatch by default
     if (swatches.length > 0) {
-      visualizerCanvas.style.backgroundColor = swatches[0].color;
+      applySofaColor(swatches[0].color, swatches[0].name[currentLang]);
     }
+  }
+
+  // --- LEATHER SAMPLE GALLERY ---
+  const leatherSamplesGrid = document.getElementById('leather-samples-grid');
+
+  // Extended leather sample data with codes (inspired by similythangthanhloi.vn product catalog)
+  const leatherSamplesData = {
+    'Simili PVC': [
+      { color: '#8B4513', name: { vi: 'Nâu Simili Classic', en: 'Classic Simili Brown' }, code: 'SPC-101' },
+      { color: '#CD853F', name: { vi: 'Bò Sáng Vintage', en: 'Vintage Light Tan' }, code: 'SPC-102' },
+      { color: '#D2B48C', name: { vi: 'Kem Cát Sa Mạc', en: 'Desert Sand Cream' }, code: 'SPC-103' },
+      { color: '#000000', name: { vi: 'Đen Bóng Cao Cấp', en: 'Premium Glossy Black' }, code: 'SPC-104' },
+      { color: '#FFFFFF', name: { vi: 'Trắng Sữa Tinh Khiết', en: 'Pure Milk White' }, code: 'SPC-105' },
+      { color: '#333333', name: { vi: 'Xám Đậm Sang Trọng', en: 'Elegant Dark Grey' }, code: 'SPC-106' }
+    ],
+    'Da PU': [
+      { color: '#c5a880', name: { vi: 'Vàng Kim Luxury', en: 'Luxury Gold' }, code: 'PU-201' },
+      { color: '#4A2E1B', name: { vi: 'Nâu Cafe Đậm', en: 'Deep Coffee Brown' }, code: 'PU-202' },
+      { color: '#8B5A2B', name: { vi: 'Nâu Hạt Dẻ Italia', en: 'Italian Chestnut' }, code: 'PU-203' },
+      { color: '#000000', name: { vi: 'Đen Mờ Premium', en: 'Premium Matte Black' }, code: 'PU-204' },
+      { color: '#EAEAEA', name: { vi: 'Trắng Kem Ngọc Trai', en: 'Pearl Cream White' }, code: 'PU-205' },
+      { color: '#A0522D', name: { vi: 'Đỏ Sienna Cổ Điển', en: 'Classic Sienna Red' }, code: 'PU-206' }
+    ],
+    'Da PVC': [
+      { color: '#2B2B2B', name: { vi: 'Đen Than Ô Tô', en: 'Automotive Charcoal' }, code: 'PVC-301' },
+      { color: '#5C4033', name: { vi: 'Nâu Đậm Nội Thất', en: 'Interior Dark Brown' }, code: 'PVC-302' },
+      { color: '#D2B48C', name: { vi: 'Kem Bọc Ghế Sofa', en: 'Sofa Seat Cream' }, code: 'PVC-303' },
+      { color: '#800000', name: { vi: 'Đỏ Đô Royal', en: 'Royal Maroon' }, code: 'PVC-304' },
+      { color: '#1A303A', name: { vi: 'Xanh Navy Thượng Hạng', en: 'Premium Navy Blue' }, code: 'PVC-305' }
+    ],
+    'Microfiber': [
+      { color: '#3E2723', name: { vi: 'Nâu Gụ Hạng Sang', en: 'Premium Mahogany' }, code: 'MF-401' },
+      { color: '#4E342E', name: { vi: 'Nâu Đất Siêu Mịn', en: 'Ultra-smooth Earth Brown' }, code: 'MF-402' },
+      { color: '#212121', name: { vi: 'Đen Carbon Luxury', en: 'Luxury Carbon Black' }, code: 'MF-403' },
+      { color: '#BDBDBD', name: { vi: 'Ghi Xám Bạc', en: 'Silver Light Grey' }, code: 'MF-404' },
+      { color: '#8D6E63', name: { vi: 'Nâu Khói Mộc Mạc', en: 'Rustic Smoky Brown' }, code: 'MF-405' }
+    ]
+  };
+
+  function renderLeatherGallery(swatches) {
+    if (!leatherSamplesGrid) return;
+
+    const samples = leatherSamplesData[activeMaterial] || swatches.map((s, i) => ({
+      ...s,
+      code: `${activeMaterial.replace(/\s/g, '-')}-${String(i+1).padStart(3, '0')}`
+    }));
+
+    leatherSamplesGrid.innerHTML = '';
+
+    samples.forEach((sample, idx) => {
+      const card = document.createElement('div');
+      card.className = 'leather-sample-card' + (idx === 0 ? ' active' : '');
+      card.dataset.color = sample.color;
+
+      card.innerHTML = `
+        <div class="leather-sample-img" style="background-image: url('assets/images/leather_swatch_texture.png'); background-color: ${sample.color};"></div>
+        <span class="leather-sample-badge">${sample.code}</span>
+        <div class="leather-sample-info">
+          <div class="leather-sample-name">${sample.name[currentLang]}</div>
+          <div class="leather-sample-code">${activeMaterial} • ${sample.code}</div>
+        </div>
+      `;
+
+      card.addEventListener('click', () => {
+        // Highlight this card
+        document.querySelectorAll('.leather-sample-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+
+        // Apply to sofa
+        applySofaColor(sample.color, sample.name[currentLang]);
+
+        // Also highlight matching swatch
+        document.querySelectorAll('#vaz-swatches .leather-swatch-item').forEach(s => {
+          s.classList.toggle('active', s.dataset.color === sample.color);
+        });
+
+        // Smooth scroll to visualizer
+        document.getElementById('visualizer-display').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+
+      leatherSamplesGrid.appendChild(card);
+    });
   }
 
   // --- SUBMIT SAMPLE REQUEST FORM ---
@@ -382,15 +825,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const result = await response.json();
 
       if (response.ok) {
-        showToast('✅ Gửi yêu cầu nhận mẫu thành công! Chúng tôi sẽ gọi lại trong 24h.', 'success');
+        showToast(t('toast.submitSuccess'), 'success');
         requestForm.reset();
-        document.getElementById('colorInterest').value = 'Tự chọn';
+        document.getElementById('colorInterest').value = t('request.form.color.default');
       } else {
         throw new Error(result.message || 'Lỗi lưu thông tin');
       }
     } catch (err) {
       console.error(err);
-      showToast('⚠️ Không thể kết nối server để lưu yêu cầu. Vui lòng kiểm tra lại.', 'error');
+      showToast(t('toast.submitError'), 'error');
     }
   });
 
@@ -408,8 +851,10 @@ document.addEventListener('DOMContentLoaded', () => {
   reveals.forEach(el => revealObserver.observe(el));
 
   // Init Calls
-  fetchProducts();
+  fetchProducts().then(applyTranslations);
   renderVisualizerSwatches(visualizerMaterials[activeMaterial].swatches);
+  renderLeatherGallery(visualizerMaterials[activeMaterial].swatches);
+  applyTranslations();
 
   // Offline backup data in case backend server is unreachable
   function getOfflineBackupProducts() {
