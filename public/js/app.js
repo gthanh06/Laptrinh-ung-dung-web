@@ -606,20 +606,68 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeMaterial = 'Simili PVC';
   let activeColorHex = '#c5a880';
 
+  // Convert HEX color to HSL object
+  function hexToHsl(hex) {
+    let c = (hex || '#000000').replace('#', '').trim();
+    if (c.length === 3) c = c.split('').map(x => x + x).join('');
+    const num = parseInt(c, 16) || 0;
+    let r = ((num >> 16) & 255) / 255;
+    let g = ((num >> 8) & 255) / 255;
+    let b = (num & 255) / 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h = 0, s = 0, l = (max + min) / 2;
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+    return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+  }
+
   // Mockup images for each type
   const mockupImages = {
     sofa: 'assets/images/sofa_neutral.png',
-    car: 'assets/images/sofa_neutral.png',
-    shoe: 'assets/images/sofa_neutral.png'
+    car: 'assets/images/car_interior.png',
+    shoe: 'assets/images/oxford_shoe.png'
   };
 
-  // Apply color to sofa using blend mode overlay
+  // Apply color to sofa/car/shoe mockup using CSS pixel filters on img directly
   function applySofaColor(colorHex, colorName) {
     activeColorHex = colorHex;
+    const hsl = hexToHsl(colorHex);
 
-    // Apply color overlay on sofa image
+    // Hide the rectangular overlay element to prevent background box artifacts on transparent PNGs
     if (sofaOverlay) {
-      sofaOverlay.style.backgroundColor = colorHex;
+      sofaOverlay.style.display = 'none';
+    }
+
+    if (sofaBaseImg) {
+      // 1. Black / Dark Charcoal (#000000, #212121, #2B2B2B, #333333, #3E2723)
+      if (hsl.l <= 18) {
+        sofaBaseImg.style.filter = 'brightness(0.28) contrast(1.5) grayscale(1)';
+      }
+      // 2. White / Pure Cream Light (#FFFFFF, #EAEAEA)
+      else if (hsl.l >= 85 && hsl.s <= 20) {
+        sofaBaseImg.style.filter = 'brightness(1.55) contrast(0.85) grayscale(1)';
+      }
+      // 3. Grey / Silver / Slate Neutral (#BDBDBD, #333333, #8D6E63)
+      else if (hsl.s <= 15) {
+        const bright = 0.4 + (hsl.l / 100) * 0.9;
+        sofaBaseImg.style.filter = `brightness(${bright}) contrast(1.1) grayscale(1)`;
+      }
+      // 4. Chromatic Colors (Brown, Gold, Red, Navy, Sienna, Tan)
+      else {
+        // Calculate hue shift relative to base tan color (approx 35deg)
+        const hueShift = hsl.h - 35;
+        const bright = 0.7 + (hsl.l / 100) * 0.5;
+        const sat = 0.8 + (hsl.s / 100) * 1.3;
+        sofaBaseImg.style.filter = `sepia(0.65) hue-rotate(${hueShift}deg) saturate(${sat}) brightness(${bright}) contrast(1.05)`;
+      }
     }
 
     // Update color label
@@ -631,23 +679,22 @@ document.addEventListener('DOMContentLoaded', () => {
       texturePreviewInner.style.backgroundColor = colorHex;
     }
 
-    // Animate sofa wrapper with a subtle pulse
+    // Animate mockup wrapper with a subtle scale pulse
     if (sofaWrapper) {
-      sofaWrapper.style.filter = 'drop-shadow(0 25px 50px rgba(0,0,0,0.7)) brightness(1.05)';
+      sofaWrapper.style.transform = 'scale(1.02)';
       setTimeout(() => {
-        sofaWrapper.style.filter = 'drop-shadow(0 25px 50px rgba(0,0,0,0.7))';
-      }, 400);
+        sofaWrapper.style.transform = 'scale(1)';
+      }, 300);
     }
   }
 
-  // Toggle Mockup Display (Sofa, Car Seat, Shoe) - now changes the mockup text label only
+  // Toggle Mockup Display (Sofa, Car Seat, Shoe)
   controlMockups.forEach(btn => {
     btn.addEventListener('click', (e) => {
       controlMockups.forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
 
       const mockupName = e.target.dataset.mockup;
-      // For now, we use sofa image for all mockups
       if (sofaBaseImg && mockupImages[mockupName]) {
         sofaBaseImg.src = mockupImages[mockupName];
       }

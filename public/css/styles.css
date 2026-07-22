@@ -784,16 +784,24 @@
     position: relative;
     width: 85%;
     max-width: 420px;
-    filter: drop-shadow(0 25px 50px rgba(0,0,0,0.7));
-    transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    height: 260px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    filter: drop-shadow(0 20px 45px rgba(0,0,0,0.8));
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .sofa-base-img {
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
     height: auto;
+    object-fit: contain;
     display: block;
     position: relative;
     z-index: 1;
+    transition: filter 0.4s ease;
   }
 
   .sofa-color-overlay {
@@ -804,7 +812,7 @@
     height: 100%;
     z-index: 2;
     mix-blend-mode: color;
-    transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: background-color 0.4s ease, opacity 0.4s ease;
     pointer-events: none;
     border-radius: inherit;
   }
